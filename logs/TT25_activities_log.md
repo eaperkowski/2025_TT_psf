@@ -1,5 +1,18 @@
 # Trillium Trail Plant-Soil Feedback Experiment Daily Activities Log
 
+## Tuesday 1/7
+ - Evan and Monika will give all plants 100 mL of tap water
+
+## Friday 1/3
+ - Evan and Monika gave all plants 100 mL of tap water
+
+## Wednesday 12/31
+ - Evan and Monika gave all plants 100 mL of tap water
+ - 5626 an additional Trillium emergent
+
+## Saturday 12/28
+ - Evan gave all pots 100 mL of tap water
+ - Some Tri emerging: flag1_tri, 972, 1374, 2547, 2912, 3043. Some other spp emerging from 4071 and 4934 that look like a bean sprout cotyledon
 
 ## Tuesday 12/24
  - Evan gave all pots 100 mL of tap water
