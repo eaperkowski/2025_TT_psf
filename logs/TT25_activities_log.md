@@ -1,7 +1,12 @@
 # Trillium Trail Plant-Soil Feedback Experiment Daily Activities Log
 
+## Friday 1/10
+ - Evan and Monika gave all plants 100 mL of tap water
+
 ## Tuesday 1/7
- - Evan and Monika will give all plants 100 mL of tap water
+ - Evan and Monika gave all plants 100 mL of tap water
+ - Plants seem to be drying out after 4 days - should probably move to water every 3 days
+ - New Tri emergence: 1374, 5852, flag1_tri, 2912, 5722, 5626 (unwhorling), 4942, 3043
 
 ## Friday 1/3
  - Evan and Monika gave all plants 100 mL of tap water
