@@ -1,18 +1,22 @@
 # Trillium Trail Plant-Soil Feedback Experiment Daily Activities Log
 
+## Sunday 1/19
+ - Evan and Monika gave all plants 100 mL of tap water
+
 ## Friday 1/17
- - Evan and Monika, found chamber 5 to be at 30degC, treatments "yellow"(PlantW-SoilNW-FungNW) and "purple"(PlantNW-SoilW-FungW), and "purple_blue" (PlantNW-SoilW-FungWsterile) impacted and moved to other working chambers
+ - Evan and Monika found chamber 5 to be at 30degC, treatments "yellow" (PlantW-SoilNW-FungNW) and "purple" (PlantNW-SoilW-FungW), and "purple_blue" (PlantNW-SoilW-FungWsterile) impacted and moved to other working chambers
  - Monika verified tags
    - Maianthemum: all accounted for
    - Trillium: missing individual "762", have an extra individual "6884 Tri 6W-19" 
 
 ## Thursday 1/16
- - Evan, Monika, and Ava moved all Maianthemum up to the growth chambers for overwintering (chambers 1 - 5)
+ - Evan, Monika, and Ava moved all Maianthemum up to reach-in growth chambers for overwintering (chambers 1 - 5)
  - Evan, Monika, and Ava gave all plants 100 mL of tap water
- - Chambers with Maianthemum programed to: "TT-Mai"
+ - Reach-in chambers with Maianthemum programmed to: "TT-Mai" (same program as overwinter Pt. 1 in walk-in chamber)
 
 ## Monday 1/13
  - Evan and Monika gave all plants 100 mL of tap water before TT summit meeting
+ - TT folks visited plants and were happy with overall setup. Susan mentioned to be more careful with watering to avoid "pit" at center of pots
 
 ## Friday 1/10
  - Evan and Monika gave all plants 100 mL of tap water
