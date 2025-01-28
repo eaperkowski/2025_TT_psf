@@ -4,6 +4,11 @@
  - Evan inspected Mai in reach-in growth chamber. Performed some chamber maintenance and decided that Mai should only be watered every five days while in the reach-in chamber. 
       - Pots are simply not drying out as they were in the walk-in chamber
  - Evan finalize growth chamber settings for the rest of the experiment using TOMST soil temperature probe data sent by JM
+      - Sent to JM to give once-over
+ - Evan e-mail Mylea to change growth chamber program to the first full treatment condition. Hopefully this encourages more Trillium to emerge
+      - 14.5/12.5C day/night temps with 700 umol/m2/s PAR maximum at a 13-hour photoperiod
+      - Mylea e-mailed at 14:40 to communicate the growth chambers had been switched to this program
+ - Federal spending freeze announced at TTU until further notice
 
 ## Monday 1/27
  - Evan and Monika gave Trillium pots 100 mL of tap water
@@ -11,7 +16,7 @@
       - Monika also noticed water transfer between mesh layers when mesh touches each other. Also contacted Stephanie over this to see if there is a solution
  - Monika continued putting second half of split pots together for Trillium. UG RAs assisted with sterilizing pots
       - Note: need to take inventory of remaining pots to see if we need to order more from S&S
- - Evan change program for Mai in reach-in chamber to overwinter part II (12.5C/10C day/night temps with 500 umol maximum. 12 hr photoperiod)
+ - Evan change program for Mai in reach-in chamber to overwinter part II (12.5C/10C day/night temps with 500 umol/m2/s maximum. 12 hr photoperiod)
 
 ## Sunday 1/26
  - Monika continued putting second half of split pots together for Trillium. UG RAs assisted with sterilizing pots
@@ -36,13 +41,13 @@
 ## Friday 1/17
  - Evan and Monika found chamber 5 to be at 30degC, treatments "yellow" (PlantW-SoilNW-FungNW) and "purple" (PlantNW-SoilW-FungW), and "purple_blue" (PlantNW-SoilW-FungWsterile) impacted and moved to other working chambers
  - Monika verified tags
-   - Maianthemum: all accounted for
+   - Mai: all accounted for
    - Trillium: missing individual "762", have an extra individual "6884 Tri 6W-19" 
 
 ## Thursday 1/16
- - Evan, Monika, and Ava moved all Maianthemum up to reach-in growth chambers for overwintering (chambers 1 - 5)
+ - Evan, Monika, and Ava moved all Mai up to reach-in growth chambers for overwintering (chambers 1 - 5)
  - Evan, Monika, and Ava gave all plants 100 mL of tap water
- - Reach-in chambers with Maianthemum programmed to: "TT-Mai" (same program as overwinter Pt. 1 in walk-in chamber)
+ - Reach-in chambers with Mai programmed to: "TT-Mai" (same program as overwinter Pt. 1 in walk-in chamber)
 
 ## Monday 1/13
  - Evan and Monika gave all plants 100 mL of tap water before TT summit meeting
