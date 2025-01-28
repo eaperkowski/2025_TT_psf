@@ -1,5 +1,35 @@
 # Trillium Trail Plant-Soil Feedback Experiment Daily Activities Log
 
+## Tuesday 1/28
+ - Evan inspected Mai in reach-in growth chamber. Performed some chamber maintenance and decided that Mai should only be watered every five days while in the reach-in chamber. 
+      - Pots are simply not drying out as they were in the walk-in chamber
+ - Evan finalize growth chamber settings for the rest of the experiment using TOMST soil temperature probe data sent by JM
+
+## Monday 1/27
+ - Evan and Monika gave Trillium pots 100 mL of tap water
+      - Monika noticed some algae/mold growing in between mesh layers of sterile treatment - sent Stephanie an e-mail to ask if we need to swap out the gaskets
+      - Monika also noticed water transfer between mesh layers when mesh touches each other. Also contacted Stephanie over this to see if there is a solution
+ - Monika continued putting second half of split pots together for Trillium. UG RAs assisted with sterilizing pots
+      - Note: need to take inventory of remaining pots to see if we need to order more from S&S
+ - Evan change program for Mai in reach-in chamber to overwinter part II (12.5C/10C day/night temps with 500 umol maximum. 12 hr photoperiod)
+
+## Sunday 1/26
+ - Monika continued putting second half of split pots together for Trillium. UG RAs assisted with sterilizing pots
+
+## Saturday 1/25
+ - Evan and Monika gave Mai and Trillium pots 100 mL of tap water
+ - Monika continued putting second half of split pots together for Trillium.
+
+## Friday 1/24
+ - Evan and Monika trip to Home Depot to buy smaller clamps
+ - Monika started putting second half of split pots together for Trillium. UG RAs assisted with sterilizing pots
+
+## Thursday 1/23
+ - Evan and Monika gave Trillium and Mai pots 100 mL of tap water
+
+## Tuesday 1/21
+ - Evan and Monika gave Trillium pots 100 mL of tap water
+
 ## Sunday 1/19
  - Evan and Monika gave all plants 100 mL of tap water
 
