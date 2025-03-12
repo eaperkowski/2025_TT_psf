@@ -60,7 +60,7 @@ fifty600_mai_plot <- ggplot(data = subset(aq_merged, id == "5600_mai_red" & Qin 
   geom_point(size = 2) +
   geom_vline(xintercept = 300, color = "red", linewidth = 2, linetype = "dashed") +
   scale_x_continuous(limits = c(0, 600), breaks = seq(0, 600, 200)) +
-  scale_y_continuous(limits = c(1.0, 2.0), breaks = seq(1.0, 2.0, 0.25)) +
+  scale_y_continuous(limits = c(0.8, 2.0), breaks = seq(0.8, 2.0, 0.3)) +
   labs(x = expression(bold("PAR ("*mu*"mol m"^"-2"*" s"^"-1"*")")), 
        y = expression(bold("A"["net"]*" ("*mu*"mol m"^"-2"*" s"^"-1"*")"))) +
   theme_classic(base_size = 18)
@@ -75,7 +75,7 @@ four781_mai_plot <- ggplot(data = subset(aq_merged, id == "4781_mai_green" & Qin
        y = expression(bold("A"["net"]*" ("*mu*"mol m"^"-2"*" s"^"-1"*")"))) +
   theme_classic(base_size = 18)
 
-png("../drafts/figs/TT25_AQ_response.png", height = 16, width = 12, units = "in",
+png("../drafts/figs/TT25_AQ_response.png", height = 10, width = 10, units = "in",
     res = 600)
 ggarrange(five105_mai_plot, six483_mai_plot, TT24_101_mai_plot,
           fifty600_mai_plot, four781_mai_plot, ncol = 2, nrow = 3)
