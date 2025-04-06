@@ -1,0 +1,18 @@
+[Header]
+File opened	2025-03-31 11:42:39
+Console s/n	68C-022608
+Console ver	Bluestem v.2.1.11
+Scripts ver	2023.02  2.1.11, Jun 2023
+Head s/n	68H-422598
+Head ver	1.4.23
+Head cal	{"oxygen": "21", "co2azero": "0.923878", "co2aspan1": "1.00016", "co2aspan2": "-0.0254498", "co2aspan2a": "0.319337", "co2aspan2b": "0.316792", "co2aspanconc1": "2491", "co2aspanconc2": "303.6", "co2bzero": "0.920183", "co2bspan1": "0.99991", "co2bspan2": "-0.0259223", "co2bspan2a": "0.316673", "co2bspan2b": "0.314045", "co2bspanconc1": "2491", "co2bspanconc2": "303.6", "h2oazero": "1.06374", "h2oaspan1": "1.01033", "h2oaspan2": "0", "h2oaspan2a": "0.0705651", "h2oaspan2b": "0.0712942", "h2oaspanconc1": "12.15", "h2oaspanconc2": "0", "h2obzero": "1.07172", "h2obspan1": "1.02672", "h2obspan2": "0", "h2obspan2a": "0.0697958", "h2obspan2b": "0.0716606", "h2obspanconc1": "12.15", "h2obspanconc2": "0", "tazero": "0.108437", "tbzero": "0.225744", "flowmeterzero": "2.50179", "flowazero": "0.302", "flowbzero": "0.29587", "chamberpressurezero": "2.61184", "ssa_ref": "35216.5", "ssb_ref": "35428.5"}
+Factory cal date	09 Mar 2022
+CO2 rangematch	Mon Mar 31 11:26
+H2O rangematch	Mon Mar 31 11:33
+Chamber type	6800-01A
+Chamber s/n	MPF-842248
+Chamber rev	0
+Chamber cal	0
+Fluorometer	MPF-842248
+Flr. Version	1.4.23
+11:42:39	Stability Definition:	ΔCO2 (Meas2): Slp<0.5 Per=20	ΔH2O (Meas2): Slp<0.5 Per=20	F (FlrLS): Per=20
