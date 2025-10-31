@@ -1,5 +1,8 @@
 # Trillium Trail Plant-Soil Feedback Experiment Daily Activities Log
 
+## Thursday 10/16
+- Monika, Ava, and members of the Ecohealth lab moved Mai and Tri from the cold room in biology 311 to the IGCAST growth chambers.
+
 ## Tuesday 1/28
  - Evan inspected Mai in reach-in growth chamber. Performed some chamber maintenance and decided that Mai should only be watered every five days while in the reach-in chamber. 
       - Pots are simply not drying out as they were in the walk-in chamber
