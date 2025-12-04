@@ -1,5 +1,12 @@
 # Trillium Trail Plant-Soil Feedback Experiment Daily Activities Log
 
+## Monday 12/2/2025
+- Some Trillium showing signs of burns?
+- Dark adapted fluorescence measurements taken on a few Trillium (2 health, and 2 unhealth looking) individuals from each treatment are measured. 
+
+## Friday 11/28/2025
+- Some Trillium showing signs of chlorosis
+
 ## Wendesday 11/12/2025
 - Fertilizing treatment for Trillium individuals initiated
      - accidently pre-fertilized 4 Maianthemum (2776, 682, 6463, 5607)
