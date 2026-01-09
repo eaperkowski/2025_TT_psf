@@ -23,7 +23,7 @@ plot,subplot,spp,id,FullExpTrt,PlantGMTrt,ExpSoilSource,ExpFungSource
 5,22,Tri,4414,PlantNW-SoilW-FungW,NW,W,W
 6,4,Tri,5641,PlantNW-SoilW-FungW,NW,W,W
 6,6,Tri,2941,PlantNW-SoilW-FungW,NW,W,W
-6,16,Tri,4543 (5232),PlantNW-SoilW-FungW,NW,W,W
+6,16,Tri,4543,PlantNW-SoilW-FungW,NW,W,W
 7,11,Tri,972,PlantNW-SoilW-FungW,NW,W,W
 7,11,Tri,2131,PlantNW-SoilW-FungW,NW,W,W
 7,18,Tri,1975,PlantNW-SoilW-FungW,NW,W,W
@@ -40,8 +40,8 @@ plot,subplot,spp,id,FullExpTrt,PlantGMTrt,ExpSoilSource,ExpFungSource
 5,33,Tri,2988,PlantW-SoilNW-FungNW,W,NW,NW
 5,33,Tri,3829,PlantW-SoilNW-FungNW,W,NW,NW
 6,2,Tri,684,PlantW-SoilNW-FungNW,W,NW,NW
-6,2,Tri,1184 (5226),PlantW-SoilNW-FungNW,W,NW,NW
-6,2,Tri,4777-C,PlantW-SoilNW-FungNW,W,NW,NW
+6,2,Tri,1184(5226),PlantW-SoilNW-FungNW,W,NW,NW
+6,2,Tri,4777C,PlantW-SoilNW-FungNW,W,NW,NW
 6,3,Tri,5742,PlantW-SoilNW-FungNW,W,NW,NW
 7,8,Tri,1827,PlantW-SoilNW-FungNW,W,NW,NW
 7,8,Tri,3071,PlantW-SoilNW-FungNW,W,NW,NW
@@ -55,14 +55,14 @@ plot,subplot,spp,id,FullExpTrt,PlantGMTrt,ExpSoilSource,ExpFungSource
 4,8,Tri,2703,PlantW-SoilNW-FungW,W,NW,W
 5,9,Tri,86,PlantW-SoilNW-FungW,W,NW,W
 5,9,Tri,7147,PlantW-SoilNW-FungW,W,NW,W
-5,14,Tri,flag2_tri,PlantW-SoilNW-FungW,W,NW,W
+5,14,Tri,flag2,PlantW-SoilNW-FungW,W,NW,W
 5,19,Tri,2547,PlantW-SoilNW-FungW,W,NW,W
 5,19,Tri,5115,PlantW-SoilNW-FungW,W,NW,W
 5,21,Tri,3077,PlantW-SoilNW-FungW,W,NW,W
 5,31,Tri,2573,PlantW-SoilNW-FungW,W,NW,W
 6,2,Tri,4373,PlantW-SoilNW-FungW,W,NW,W
 6,2,Tri,5267,PlantW-SoilNW-FungW,W,NW,W
-6,2,Tri,4777-A,PlantW-SoilNW-FungW,W,NW,W
+6,2,Tri,4777A,PlantW-SoilNW-FungW,W,NW,W
 5,9,Tri,43,PlantW-SoilNW-FungWsterile,W,NW,Wsterile
 6,2,Tri,4760,PlantW-SoilNW-FungWsterile,W,NW,Wsterile
 3,3,Tri,5436,PlantW-SoilW-FungNW,W,W,NW
@@ -73,25 +73,25 @@ plot,subplot,spp,id,FullExpTrt,PlantGMTrt,ExpSoilSource,ExpFungSource
 4,20,Tri,5040,PlantW-SoilW-FungNW,W,W,NW
 5,9,Tri,5904,PlantW-SoilW-FungNW,W,W,NW
 5,14,Tri,4177,PlantW-SoilW-FungNW,W,W,NW
-5,14,Tri,flag1_tri,PlantW-SoilW-FungNW,W,W,NW
+5,14,Tri,flag1,PlantW-SoilW-FungNW,W,W,NW
 5,21,Tri,3004,PlantW-SoilW-FungNW,W,W,NW
 5,27,Tri,5877,PlantW-SoilW-FungNW,W,W,NW
 6,2,Tri,5865,PlantW-SoilW-FungNW,W,W,NW
 6,9,Tri,5852,PlantW-SoilW-FungNW,W,W,NW
 7,8,Tri,1851,PlantW-SoilW-FungNW,W,W,NW
 7,14,Tri,2927,PlantW-SoilW-FungNW,W,W,NW
-6,2,Tri,4777-B,PlantW-SoilW-FungNWsterile,W,W,NWsterile
+6,2,Tri,4777B,PlantW-SoilW-FungNWsterile,W,W,NWsterile
 6,8,Tri,5714,PlantW-SoilW-FungNWsterile,W,W,NWsterile
 3,20,Tri,2329,PlantW-SoilW-FungW,W,W,W
 3,20,Tri,6885,PlantW-SoilW-FungW,W,W,W
 5,13,Tri,4149,PlantW-SoilW-FungW,W,W,W
-5,14,Tri,flag3_tri,PlantW-SoilW-FungW,W,W,W
+5,14,Tri,flag3,PlantW-SoilW-FungW,W,W,W
 5,19,Tri,5228,PlantW-SoilW-FungW,W,W,W
 5,20,Tri,1750,PlantW-SoilW-FungW,W,W,W
 5,20,Tri,4000,PlantW-SoilW-FungW,W,W,W
 5,31,Tri,4265,PlantW-SoilW-FungW,W,W,W
 5,32,Tri,4109,PlantW-SoilW-FungW,W,W,W
-6,1,Tri,5229,PlantW-SoilW-FungW,W,W,W
+6,1,Tri,5229_red,PlantW-SoilW-FungW,W,W,W
 6,2,Tri,4712,PlantW-SoilW-FungW,W,W,W
 7,8,Tri,632,PlantW-SoilW-FungW,W,W,W
 7,14,Tri,2996A1,PlantW-SoilW-FungW,W,W,W
@@ -118,7 +118,7 @@ plot,subplot,spp,id,FullExpTrt,PlantGMTrt,ExpSoilSource,ExpFungSource
 3,22,Tri,6558,PlantNW-SoilNW-FungNW,NW,NW,NW
 4,10,Tri,3708,PlantNW-SoilNW-FungNW,NW,NW,NW
 5,22,Tri,482,PlantNW-SoilNW-FungNW,NW,NW,NW
-5,22,Tri,5229,PlantNW-SoilNW-FungNW,NW,NW,NW
+5,22,Tri,5229_blue,PlantNW-SoilNW-FungNW,NW,NW,NW
 6,5,Tri,5771,PlantNW-SoilNW-FungNW,NW,NW,NW
 6,6,Tri,978,PlantNW-SoilNW-FungNW,NW,NW,NW
 6,11,Tri,3371,PlantNW-SoilNW-FungNW,NW,NW,NW

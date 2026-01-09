@@ -16,6 +16,9 @@ source("../../functions/clean_licor_files.R")
 # Load function for temperature standardizing (probably not needed)
 source("../../functions/temp_standardize.R")
 
+# Custom function for leaf area trillium
+calc_leafarea_tri <- function(x) exp(log(x)*2.2)
+
 # Read treatment summary
 trt_summary <- read.csv("../../data/2025_2026/TT25_tri_trt_list.csv")
 head(trt_summary)
@@ -46,12 +49,31 @@ aci_merged_tri <- plyr::rbind.fill(lapply(files, read.csv)) %>%
 # Get first row of each measurement for snapshop Anet, gsw measurements
 aci_snapshot_tri <- aci_merged_tri %>%
   group_by(id, machine) %>%
-  filter(row_number() == 1) %>%
+  filter(row_number() == 1 & !is.na(id)) %>%
+  filter(id != "2912" | id != "3031" | id != "989" |
+           id != "1851" | id != "5060" | id != "6885" |
+           id != "7147" | id != "5267" | id != "2573" |
+           id != "4777A" | id != "4547") %>%
+  mutate(machine = ifelse(is.na(machine), "yadi", machine)) %>%
   mutate(anet = Asty,
          iwue = ifelse((anet / gsw) < 0, NA, anet/gsw),
-         ci.ca = Ci / Ca) %>%
-  dplyr::select(id, machine, anet, gsw, iwue, ci.ca) %>%
-  left_join(trt_summary)
+         ci.ca = ifelse((Ci / Ca) > 1, NA, Ci / Ca),
+         id = ifelse(id == "2912_2", "2912", id),
+         id = ifelse(id == "3031_2", "3031", id),
+         id = ifelse(id == "989_2", "989", id),
+         id = ifelse(id == "1851_2", "1851", id),
+         id = ifelse(id == "5060_2", "5060", id),
+         id = ifelse(id == "6885_2", "6885", id),
+         id = ifelse(id == "7147_2", "7147", id),
+         id = ifelse(id == "5267_2", "5267", id),
+         id = ifelse(id == "2573_2", "2573", id),
+         id = ifelse(id == "4777A_2", "4777A", id),
+         id = ifelse(id == "4547_2", "4547", id),
+         id = ifelse(id == "5229" & machine == "gibson", "5229_red", id),
+         id = ifelse(id == "5229" & machine == "yadi", "5229_blue", id),
+         id = ifelse(id == "4774C", "4777C", id)) %>%
+  slice_max(order_by = anet, n = 1, with_ties = FALSE) %>%
+  dplyr::select(id, machine, anet, gsw, iwue, ci.ca)
 
 
 ##############################################################################
@@ -59,17 +81,29 @@ aci_snapshot_tri <- aci_merged_tri %>%
 ##############################################################################
 
 # Remove measurements to improve curve fit
-aci_merged_tri$keep_row[c(39, 52, 78, 92, 105, 118, 131, 144, 157, 170, 183, 196, 
-                          222, 223, 224, 225, 228, 234, 235, 274, 300, 325, 326, 366, 368, 371, 376, 378, 391, 417, 
-                          430, 432, 433, 443, 454, 457, 458, 469, 471, 472, 482, 
-                          534, 547, 549, 560, 573, 586, 605, 612, 703, 716, 722, 729, 
-                          730, 768, 784,
-                          794, 820, 847, 898, 900, 904, 911, 924, 930, 937, 950, 963,
-                          976, 996, 997, 998, 999, 1000, 1001, 1258,
-                          1015, 1021, 1024, 1028, 1034, 1054, 1067, 1073, 1099, 
-                          1275, 1289, 1290, 1291, 1296, 1317, 1331,
-                          1345, 1359, 1373, 1429, 1443, 1457, 1471, 1485,
-                          1513, 1534, 1569)] <- "no"
+aci_merged_tri$keep_row[c(13, 32, 39, 52, 58, 78, 91, 92, 93, 105, 118, 131, 144, 
+                          150, 157, 170, 176, 183, 189, 196, 209, 222, 223, 224, 
+                          225, 228, 234, 235, 236, 237, 254, 274, 287, 300, 306, 
+                          319, 325, 326, 339, 366, 368, 371, 376, 378, 384, 391, 
+                          417, 430, 432, 433, 436, 443, 454, 457, 458, 459, 469, 
+                          471, 472, 480, 482, 495, 508, 521, 527, 534, 536, 547, 
+                          549, 560, 573, 586, 601, 602, 605, 607, 612, 614, 640, 
+                          641, 651, 677, 690, 692, 696, 703, 716, 717, 718, 719, 
+                          722, 729, 730, 735, 742, 748, 755, 761, 768, 781, 784, 
+                          794, 820, 833, 846, 847, 860, 898, 900, 904, 911, 924, 
+                          930, 937, 950, 963, 976, 996, 997, 998, 999, 1000, 
+                          1001, 1258, 1015, 1021, 1023, 1024, 1028, 1034, 1047, 
+                          1054, 1067, 1069, 1070, 1071, 1073, 1075, 1095, 1099, 
+                          1120, 1121, 1125, 1133, 1138, 1145, 1160, 1161, 1162, 
+                          1165, 1171, 1177, 1186, 1187, 1188, 1191, 1199, 1200, 
+                          1210, 1275, 1289, 1290, 1291, 1296, 1317, 1331, 1345, 
+                          1359, 1373, 1395, 1397, 1402, 1403, 1404, 1408, 1409, 
+                          1429, 1431, 1432, 1443, 1446, 1457, 1458, 1459, 1460, 
+                          1471, 1473, 1474, 1480, 1485, 1499, 1500, 1501, 1513, 
+                          1528, 1529, 1530, 1534, 1535, 1541, 1569, 1570, 1571, 
+                          1572, 1577, 1585, 1586, 1592, 1597, 1598, 1599, 1600, 
+                          1605, 1611, 1625, 1634, 1639, 1640, 1641, 1642, 1645, 
+                          1654, 1655, 1656, 1658, 1667)] <- "no"
 
 ########
 # 5436
@@ -103,7 +137,6 @@ aci_coefs <- aci_coefs %>%
           Vcmax = coef(tri_9145)[1], Jmax = coef(tri_9145)[2],
           Rd = coef(tri_9145)[3], TPU = coef(tri_9145)[4],
           leaf_length = 6.4)
-
 
 ########
 # 2927
@@ -233,7 +266,6 @@ aci_coefs <- aci_coefs %>%
           Rd = coef(tri_3004)[3], TPU = coef(tri_3004)[4],
           leaf_length = 6.5)
 
-
 ########
 # 552
 ########
@@ -321,7 +353,7 @@ aci_coefs <- aci_coefs %>%
           leaf_length = 6.1)
 
 ########
-# 2416 (update leaf area)
+# 2416
 ########
 tri_2416 <- aci_merged_tri %>%
   filter(id == 2416 & keep_row == "yes" & Ci > 200) %>% fitaci(
@@ -338,7 +370,7 @@ aci_coefs <- aci_coefs %>%
           leaf_length = 4.4)
 
 ########
-# 2276 (update leaf area)
+# 2276
 ########
 tri_2276 <- aci_merged_tri %>%
   filter(id == 2276 & keep_row == "yes" & Ci > 200) %>% fitaci(
@@ -355,7 +387,7 @@ aci_coefs <- aci_coefs %>%
           leaf_length = 4.8)
 
 ########
-# 1647 (update leaf area)
+# 1647
 ########
 tri_1647 <- aci_merged_tri %>%
   filter(id == 1647 & keep_row == "yes") %>% fitaci(
@@ -372,7 +404,7 @@ aci_coefs <- aci_coefs %>%
           leaf_length = 5.5)
 
 ########
-# 2563 (update leaf area)
+# 2563
 ########
 tri_2563 <- aci_merged_tri %>%
   filter(id == 2563 & keep_row == "yes") %>% fitaci(
@@ -389,7 +421,7 @@ aci_coefs <- aci_coefs %>%
           leaf_length = 5.6)
 
 ########
-# 4990 (update leaf area)
+# 4990
 ########
 tri_4990 <- aci_merged_tri %>%
   filter(id == 4990 & keep_row == "yes") %>% fitaci(
@@ -529,7 +561,7 @@ aci_coefs <- aci_coefs %>%
 # 5865
 ########
 tri_5865 <- aci_merged_tri %>%
-  filter(id == 5865 & keep_row == "yes") %>% fitaci(
+  filter(id == 5865 & keep_row == "yes" & Ci > 200) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -613,10 +645,11 @@ tri_6879 <- aci_merged_tri %>%
 plot(tri_6879)
 summary(tri_6879)
 
+# Bad curve, not including in dataset
 aci_coefs <- aci_coefs %>%
   add_row(id = "6879", spp = "Tri", 
-          Vcmax = coef(tri_6879)[1], Jmax = coef(tri_6879)[2],
-          Rd = coef(tri_6879)[3], TPU = coef(tri_6879)[4],
+          Vcmax = NA, Jmax = NA,
+          Rd = NA, TPU = NA,
           leaf_length = 4.7)
 
 ########
@@ -862,7 +895,7 @@ aci_coefs <- aci_coefs %>%
 # 3708
 ########
 tri_3708 <- aci_merged_tri %>%
-  filter(id == 3708 & keep_row == "yes") %>% fitaci(
+  filter(id == 3708 & keep_row == "yes" & Ci > 250) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -879,7 +912,7 @@ aci_coefs <- aci_coefs %>%
 # 5229
 ########
 tri_5229red <- aci_merged_tri %>%
-  filter(id == 5229 & keep_row == "yes" & machine == "gibson") %>% fitaci(
+  filter(id == 5229 & keep_row == "yes" & machine == "gibson" & Ci > 205) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -896,7 +929,7 @@ aci_coefs <- aci_coefs %>%
 # 4149
 ########
 tri_4149 <- aci_merged_tri %>%
-  filter(id == 4149 & keep_row == "yes") %>% fitaci(
+  filter(id == 4149 & keep_row == "yes" & Ci > 200) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -930,7 +963,7 @@ aci_coefs <- aci_coefs %>%
 # 2988
 ########
 tri_2988 <- aci_merged_tri %>%
-  filter(id == 2988 & keep_row == "yes") %>% fitaci(
+  filter(id == 2988 & keep_row == "yes" & Ci > 200 & Ci < 850) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -947,7 +980,7 @@ aci_coefs <- aci_coefs %>%
 # 452
 ########
 tri_452 <- aci_merged_tri %>%
-  filter(id == 452 & keep_row == "yes") %>% fitaci(
+  filter(id == 452 & keep_row == "yes" & elapsed > 3500) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -1012,7 +1045,7 @@ aci_coefs <- aci_coefs %>%
           leaf_length = 7.8)
 
 ########
-# 2996
+# 2996A2
 ########
 tri_2996a2 <- aci_merged_tri %>%
   filter(id == "2996A2" & keep_row == "yes") %>% fitaci(
@@ -1117,7 +1150,7 @@ aci_coefs <- aci_coefs %>%
 # 978
 ########
 tri_978 <- aci_merged_tri %>%
-  filter(id == 978 & keep_row == "yes") %>% fitaci(
+  filter(id == 978 & keep_row == "yes" & Ci > 200) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -1151,7 +1184,7 @@ aci_coefs <- aci_coefs %>%
 # flag3
 ########
 tri_flag3 <- aci_merged_tri %>%
-  filter(id == "flag3" & keep_row == "yes" & Asty >-0.2) %>% fitaci(
+  filter(id == "flag3" & keep_row == "yes" & Asty >-0.15 & Ci > 200) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -1219,7 +1252,7 @@ aci_coefs <- aci_coefs %>%
 # 3829
 ########
 tri_3829 <- aci_merged_tri %>%
-  filter(id == 3829 & keep_row == "yes") %>% fitaci(
+  filter(id == 3829 & keep_row == "yes" & Ci < 800) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -1570,7 +1603,7 @@ aci_coefs <- aci_coefs %>%
 # 7574
 ########
 tri_7574 <- aci_merged_tri %>%
-  filter(id == 7574 & keep_row == "yes" & Asty < 4) %>% fitaci(
+  filter(id == 7574 & keep_row == "yes" & Asty < 3.5) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -1740,10 +1773,10 @@ aci_coefs <- aci_coefs %>%
 # 3526
 ########
 tri_3526 <- aci_merged_tri %>%
-  filter(id == 3526 & keep_row == "yes") %>% fitaci(
+  filter(id == 3526 & keep_row == "yes" & Ci > 200) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
-    Tcorrect = FALSE, fitTPU = TRUE)
+    Tcorrect = FALSE, fitTPU = TRUE, citransition = 400)
 plot(tri_3526)
 summary(tri_3526)
 
@@ -1764,17 +1797,18 @@ tri_5626 <- aci_merged_tri %>%
 plot(tri_5626)
 summary(tri_5626)
 
+# No curve - messy
 aci_coefs <- aci_coefs %>%
   add_row(id = "5626", spp = "Tri", 
-          Vcmax = coef(tri_5626)[1], Jmax = coef(tri_5626)[2],
-          Rd = coef(tri_5626)[3], TPU = coef(tri_5626)[4],
+          Vcmax = NA, Jmax = NA,
+          Rd = NA, TPU = NA,
           leaf_length = 5.9)
 
 ########
 # 6881
 ########
 tri_6881 <- aci_merged_tri %>%
-  filter(id == 6881 & keep_row == "yes" & Ci > 200 & Ci < 1200) %>% fitaci(
+  filter(id == 6881 & keep_row == "yes" & Ci > 200 & Ci < 1200 & Asty < 0.2) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -1791,7 +1825,7 @@ aci_coefs <- aci_coefs %>%
 # 7147
 ########
 tri_7147 <- aci_merged_tri %>%
-  filter(id == "7147_2" & keep_row == "yes") %>% fitaci(
+  filter(id == "7147_2" & keep_row == "yes" & Ci > 200) %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
@@ -1815,47 +1849,294 @@ tri_5267 <- aci_merged_tri %>%
 plot(tri_5267)
 summary(tri_5267)
 
+# Messy curve
 aci_coefs <- aci_coefs %>%
   add_row(id = "5267", spp = "Tri", 
-          Vcmax = coef(tri_5267)[1], Jmax = coef(tri_5267)[2],
-          Rd = coef(tri_5267)[3], TPU = coef(tri_5267)[4],
+          Vcmax = NA, Jmax = NA,
+          Rd = NA, TPU = NA,
           leaf_length = 5.1)
 
 ########
-# 
+# 2547
 ########
-tri_ <- aci_merged_tri %>%
-  filter(id ==  & keep_row == "yes") %>% fitaci(
+tri_2547 <- aci_merged_tri %>%
+  filter(id == 2547 & keep_row == "yes") %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
-plot()
-summary()
+plot(tri_2547)
+summary(tri_2547)
 
 aci_coefs <- aci_coefs %>%
-  add_row(id = "", spp = "Tri", 
-          Vcmax = coef()[1], Jmax = coef()[2],
-          Rd = coef()[3], TPU = coef()[4],
-          leaf_length = )
+  add_row(id = "2547", spp = "Tri", 
+          Vcmax = coef(tri_2547)[1], Jmax = coef(tri_2547)[2],
+          Rd = coef(tri_2547)[3], TPU = coef(tri_2547)[4],
+          leaf_length = 5.9)
 
 ########
-# 
+# 614
 ########
-tri_ <- aci_merged_tri %>%
-  filter(id ==  & keep_row == "yes") %>% fitaci(
+tri_614 <- aci_merged_tri %>%
+  filter(id == 614 & keep_row == "yes") %>% fitaci(
     varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
                     Ci = "Ci", PPFD = "Qin_cuvette"),
     Tcorrect = FALSE, fitTPU = TRUE)
-plot()
-summary()
+plot(tri_614)
+summary(tri_614)
 
 aci_coefs <- aci_coefs %>%
-  add_row(id = "", spp = "Tri", 
-          Vcmax = coef()[1], Jmax = coef()[2],
-          Rd = coef()[3], TPU = coef()[4],
-          leaf_length = )
+  add_row(id = "614", spp = "Tri", 
+          Vcmax = coef(tri_614)[1], Jmax = coef(tri_614)[2],
+          Rd = coef(tri_614)[3], TPU = coef(tri_614)[4],
+          leaf_length = 6.1)
 
+########
+# 4543
+########
+aci_coefs <- aci_coefs %>%
+  add_row(id = "4543", spp = "Tri", 
+          Vcmax = NA, Jmax = NA,
+          Rd = NA, TPU = NA,
+          leaf_length = NA)
 
+########
+# 5641
+########
+tri_5641 <- aci_merged_tri %>%
+  filter(id == 5641 & keep_row == "yes") %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_5641)
+summary(tri_5641)
 
+aci_coefs <- aci_coefs %>%
+  add_row(id = "5641", spp = "Tri", 
+          Vcmax = coef(tri_5641)[1], Jmax = coef(tri_5641)[2],
+          Rd = coef(tri_5641)[3], TPU = coef(tri_5641)[4],
+          leaf_length = 6.2)
 
+########
+# 2289
+########
+tri_2289 <- aci_merged_tri %>%
+  filter(id == 2289 & keep_row == "yes") %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_2289)
+summary(tri_2289)
 
+aci_coefs <- aci_coefs %>%
+  add_row(id = "2289", spp = "Tri", 
+          Vcmax = coef(tri_2289)[1], Jmax = coef(tri_2289)[2],
+          Rd = coef(tri_2289)[3], TPU = coef(tri_2289)[4],
+          leaf_length = 7.0)
+
+########
+# 1686
+########
+tri_1686 <- aci_merged_tri %>%
+  filter(id == 1686 & keep_row == "yes") %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_1686)
+summary(tri_1686)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "1686", spp = "Tri", 
+          Vcmax = coef(tri_1686)[1], Jmax = coef(tri_1686)[2],
+          Rd = coef(tri_1686)[3], TPU = coef(tri_1686)[4],
+          leaf_length = 7.2)
+
+########
+# 4934
+########
+tri_4934 <- aci_merged_tri %>%
+  filter(id == 4934 & keep_row == "yes" & Ci < 1000) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = FALSE)
+plot(tri_4934)
+summary(tri_4934)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "4934", spp = "Tri", 
+          Vcmax = coef(tri_4934)[1], Jmax = coef(tri_4934)[2],
+          Rd = coef(tri_4934)[3], TPU = NA,
+          leaf_length = 4.8)
+
+########
+# 4582
+########
+tri_4582 <- aci_merged_tri %>%
+  filter(id == 4582 & keep_row == "yes") %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_4582)
+summary(tri_4582)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "4582", spp = "Tri", 
+          Vcmax = coef(tri_4582)[1], Jmax = coef(tri_4582)[2],
+          Rd = coef(tri_4582)[3], TPU = coef(tri_4582)[4],
+          leaf_length = 5)
+
+########
+# 2573
+########
+tri_2573 <- aci_merged_tri %>%
+  filter(id == "2573_2" & keep_row == "yes" & Ci > 100) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_2573)
+summary(tri_2573)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "2573", spp = "Tri", 
+          Vcmax = coef(tri_2573)[1], Jmax = coef(tri_2573)[2],
+          Rd = coef(tri_2573)[3], TPU = coef(tri_2573)[4],
+          leaf_length = 7.9)
+
+########
+# 4373
+########
+tri_4373 <- aci_merged_tri %>%
+  filter(id == 4373 & keep_row == "yes" & Ci > 101) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_4373)
+summary(tri_4373)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "4373", spp = "Tri", 
+          Vcmax = coef(tri_4373)[1], Jmax = coef(tri_4373)[2],
+          Rd = coef(tri_4373)[3], TPU = coef(tri_4373)[4],
+          leaf_length = 5.1)
+
+########
+# 86
+########
+aci_coefs <- aci_coefs %>%
+  add_row(id = "86", spp = "Tri", 
+          Vcmax = NA, Jmax = NA,
+          Rd = NA, TPU = NA,
+          leaf_length = NA)
+
+########
+# 4777A
+########
+tri_4777A <- aci_merged_tri %>%
+  filter(id == "4777A_2" & keep_row == "yes" & Ci > 0 & Ci < 700) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_4777A)
+summary(tri_4777A)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "4777A", spp = "Tri", 
+          Vcmax = coef(tri_4777A)[1], Jmax = coef(tri_4777A)[2],
+          Rd = coef(tri_4777A)[3], TPU = coef(tri_4777A)[4],
+          leaf_length = 6.6)
+
+########
+# 2703
+########
+tri_2703 <- aci_merged_tri %>%
+  filter(id == 2703 & keep_row == "yes") %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_2703)
+summary(tri_2703)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "2703", spp = "Tri", 
+          Vcmax = coef(tri_2703)[1], Jmax = coef(tri_2703)[2],
+          Rd = coef(tri_2703)[3], TPU = coef(tri_2703)[4],
+          leaf_length = 6.5)
+
+########
+# 5115
+########
+tri_5115 <- aci_merged_tri %>%
+  filter(id == 5115 & keep_row == "yes" & Ci > 200 & Ci < 1500) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_5115)
+summary(tri_5115)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "5115", spp = "Tri", 
+          Vcmax = coef(tri_5115)[1], Jmax = coef(tri_5115)[2],
+          Rd = coef(tri_5115)[3], TPU = coef(tri_5115)[4],
+          leaf_length = 6.9)
+
+########
+# 2131
+########
+tri_2131 <- aci_merged_tri %>%
+  filter(id == 2131 & keep_row == "yes" & Ci > 100) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_2131)
+summary(tri_2131)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "2131", spp = "Tri", 
+          Vcmax = coef(tri_2131)[1], Jmax = coef(tri_2131)[2],
+          Rd = coef(tri_2131)[3], TPU = coef(tri_2131)[4],
+          leaf_length = 5.7)
+
+########
+# 2379
+########
+tri_2379 <- aci_merged_tri %>%
+  filter(id ==  2379 & keep_row == "yes" & Ci > 200) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_2379)
+summary(tri_2379)
+
+aci_coefs <- aci_coefs %>%
+  add_row(id = "2379", spp = "Tri", 
+          Vcmax = coef(tri_2379)[1], Jmax = coef(tri_2379)[2],
+          Rd = coef(tri_2379)[3], TPU = coef(tri_2379)[4],
+          leaf_length = 4.9)
+
+########
+# 4547
+########
+tri_4547 <- aci_merged_tri %>%
+  filter(id == "4547_2" & keep_row == "yes" & Ci > 0 & Ci < 1000) %>% fitaci(
+    varnames = list(ALEAF = "Asty", Tleaf = "Tleaf", 
+                    Ci = "Ci", PPFD = "Qin_cuvette"),
+    Tcorrect = FALSE, fitTPU = TRUE)
+plot(tri_4547)
+summary(tri_4547)
+
+# Messy curve
+aci_coefs <- aci_coefs %>%
+  add_row(id = "4547", spp = "Tri", 
+          Vcmax = NA, Jmax = NA,
+          Rd = NA, TPU = NA,
+          leaf_length = NA)
+########
+# Merge snapshot photosynthesis data with A/Ci curve parameters
+########
+tri_photo_total <- aci_snapshot_tri %>%
+  full_join(aci_coefs, by = "id") %>%
+  left_join(trt_summary) %>%
+  filter(!is.na(machine)) %>%
+  mutate(tla = calc_leafarea_tri(leaf_length)) %>%
+  dplyr::select(id, spp, plot:ExpFungSource, machine, anet:leaf_length, tla) %>%
+  write.csv("../../data/2025_2026/TT25_tri_photo_traits.csv", row.names = F)
+head(tri_photo_total)
