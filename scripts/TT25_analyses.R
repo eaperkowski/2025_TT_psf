@@ -15,7 +15,7 @@ library(emmeans)
 library(multcomp)
 
 # Read data file
-df <- read.csv("../data/TT25_full_physiology.csv")
+df <- read.csv("../data/2024_2025/TT25_full_physiology.csv")
 
 # Remove sterile treatments from analyses (too little power)
 df_model <- filter(df, ExpFungSource != "NWsterile" & ExpFungSource != "Wsterile")
@@ -28,6 +28,13 @@ names(facet.labs) <- c("NW", "W")
 ## Color palettes
 gm.colors <- c("#F1B700", "#00B2BE")
 
+df_model %>%
+  filter(!is.na(anet)) %>%
+  group_by(plantGMtrt, expSoilSource, ExpFungSource) %>%
+  summarize(length(anet))
+
+
+
 #####################################################################
 #####################################################################
 # Fit models!
@@ -39,7 +46,7 @@ gm.colors <- c("#F1B700", "#00B2BE")
 #####################################################################
 # Fit model
 anet_lm <- lm(anet ~ plantGMtrt * expSoilSource * ExpFungSource,
-              data = subset(df_model, anet > 0))
+              data = subset(df_model))
 
 # Check model assumptions
 qqnorm(residuals(anet_lm))
