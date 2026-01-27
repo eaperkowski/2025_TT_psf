@@ -1,0 +1,132 @@
+date,id,plant health,plant height (cm),leaves (count),gasket,shoot weight (gram),root weight (gram),rhizome weight (gram),note
+12/22/2025,4582_Tri_green,alive,13.8,3,good,1.43,0.84,7.49,
+12/22/2025,5865_Tri_orange,alive_other,6.5,3,good,0.96,0.53,6.75,seneseed
+12/22/2025,1374_Tri_white,alive,11.4,3,good,4.13,0.83,12.15,
+12/22/2025,5722_Tri_purple_blue,alive,10.9,3,good,3.44,2.65,16.93,flowering
+12/22/2025,4576_Tri_yellow,alive,15.4,3,good,2.58,1.22,8.66,
+12/22/2025,5771_Tri_blue,alive,15.8,3+3,good,4.46,1.68,6.82,"cryovial reads ""5267_tri_pink"" but should be ""5771"", twin"
+12/22/2025,5267_Tri_pink,alive_other,0.8,3,good,0.48,0.57,3.77,"cryovial has handwritten ""5267_b"", seneseed"
+12/22/2025,2941_Tri_purple,alive,8.3,3+3,,4.17,2.65,14.02,"flowering, twin"
+12/22/2025,2131_Tri_purple,alive,11.5,3,good,3.31,2.22,13.47,
+12/22/2025,4934_Tri_green,alive,9.8,3,good,1.35,0.66,4.85,
+12/22/2025,4777-C_Tri_yellow,dead_other,8.9,3,good,0.76,0.46,2.5,peticole pinched
+12/22/2025,392_Tri_blue,dead_other,10.9,3,good,1.54,0.42,7.69,seneseed
+12/22/2025,4777-A_Tri_pink,other,7.1,3,good,1.28,0.94,9,seneseed
+12/22/2025,4149_Tri_red,alive,14.8,3,good,4.44,1.2,11.36,flowering
+12/22/2025,1686_Tri_green,alive,18.6,3,good,3.57,1.52,10.74,flowering
+12/22/2025,4547_Tri_purple,alive,7.6,3,,1.88,1.04,14.37,
+12/22/2025,1827_Tri_yellow,alive,14.2,3,good,1.69,1.3,5.42,
+12/22/2025,3371_Tri_blue,alive,9.1,3,good,1.7,1.68,10.06,
+12/22/2025,2547_Tri_pink,alive,20.9,3+3,good,5.51,2.64,29.1,twins
+12/22/2025,2996A1_Tri_red,alive,11.6,3,good,2.97,0.74,9.26,
+12/22/2025,1851_Tri_orange,alive,9.4,3,good,1.71,0.83,3.19,
+12/22/2025,5877_Tri_orange,alive,15.2,3,good,2.88,1.11,9.11,
+12/22/2025,3031_Tri_white,alive,10.2,3,good,2.29,1.64,6.88,
+12/22/2025,6875_Tri_white,alive,14.9,3,good,4.86,1.44,11.51,flowering
+12/22/2025,5060_Tri_red_blue,alive,10.6,3,good,2.86,0.45,15.12,
+12/22/2025,4444(2988)_Tri_red_blue,alive,18.4,3,good,5.42,1.31,12.64,flowering
+12/22/2025,916_Tri_green_blue,alive,10.2,3,good,1.91,0.3,19.56,
+12/22/2025,1184(5226)_Tri_yellow,dead,0,0,good,,,9.41,
+12/22/2025,3708_Tri_blue,alive,16.5,3,good,4.36,1.13,18.06,the scan envelope is wrong; is actually 3708 moved to correct envelope
+12/22/2025,7147_Tri_pink,alive,15,3,good,3.5,1.34,13.84,flowering
+12/22/2025,3043_Tri_purple,alive,18.2,3,good,3.44,3.74,15.59,
+12/22/2025,972_Tri_purple,alive,18.3,3,good,5.23,2.47,21.15,
+12/22/2025,4000_Tri_red,alive,19.5,3,good,6.71,2.08,22.51,flowering
+12/22/2025,5115_Tri_pink,alive,11.2,3,good,1.43,0.88,7.16,seneseed
+12/22/2025,2379_Tri_purple,alive,6.1,3,good,2.61,1.19,20.18,
+12/22/2025,2289_Tri_green,alive,15.6,3,good,4.19,2.38,11.11,
+12/22/2025,774_Tri_yellow,alive,13.9,3,good,2.1,3.66,13.13,
+12/22/2025,5229_white_Tri_blue,dead_other,7.9,3,good,1.88,0.7,12.09,peticole pinched
+12/22/2025,2703_Tri_pink,alive,19.4,3,good,5.22,1.56,13.03,root trying to cross
+12/22/2025,5229_red_Tri_red,alive,12.4,3,good,1.93,1.75,8.26,
+12/23/2025,452_Tri_blue,alive,17.9,3,good,3.06,1.62,10.34,
+12/23/2025,4942_Tri_pink,alive,8.5,3,good,0.63,0.81,3.66,seneseed
+12/23/2025,4712_Tri_red,alive,10,3,good,1.62,0.39,6.31,
+12/23/2025,4109_Tri_red,alive,16.1,3,good,3.28,1.03,12.05,
+12/23/2025,1975_Tri_purple,alive,12.2,3,good,2.36,0.92,3,
+12/23/2025,7574_Tri_green,alive,9.3,3,good,2.2,0.93,38.28,leaf -20?C stripped
+12/23/2025,2416_Tri_green_blue,alive,12.9,3,bad,0.86,0.62,4.03,"gaskets touching, seneseed"
+12/23/2025,902_Tri_orange,alive,10.1,3,good,1.76,1.01,3.92,
+12/23/2025,2980_Tri_white,,13.2,3,good,2.43,1.61,6.59,
+12/23/2025,4714_Tri_yellow,alive,13.6,3,,2.87,1.49,20.54,flowering
+12/23/2025,1666_Tri_pink,alive,9.4,3,good,1.4,0.82,10.9,seneseed
+12/23/2025,flag3_tri_Tri_red,alive,10.4,3,good,1.49,0.97,9.38,seneseed
+12/23/2025,5641_Tri_purple,alive,6.3,3,good,2.03,1.04,7.72,flowering
+12/23/2025,2886_Tri_green,dead,0,0,good,,1.32,4.38,no leaf samples; no leaves
+12/23/2025,4081_Tri-green,alive,8,3,good,0.99,0.68,3.48,seneseed
+12/23/2025,43_Tri_pink_blue,alive,20.5,3,good,3.7,1.33,11.76,
+12/23/2025,5852_Tri_orange,alive,10.4,3,good,1.61,1.63,11.07,
+12/23/2025,5619_Tri_white,alive,8.1,3,good,1.11,1.51,5,
+12/23/2025,3829_Tri_yellow,alive,10.2,3,good,1.52,0.55,11.44,seneseed
+12/23/2025,4505_Tri_blue,alive,19.4,3+3,good,5.67,2.33,20.33,"twins, seneseed, flowering"
+12/23/2025,3379_Tri_blue_blue,alive,6.1,3,good,1.04,1.32,5.07,
+12/23/2025,5714_Tri_orange_blue,alive,7.7,3,good,1.86,1.02,9.26,flowering
+12/23/2025,4177_Tri_orange,alive,15.5,3,good,2.82,1.29,11.85,flowering
+12/23/2025,6507_Tri_white,alive,10.5,3+3,good,3.37,3.02,15.56,twins
+12/23/2025,5436_Tri_orange,alive,9,3,good,1.31,1.24,8.04,seneseed
+12/23/2025,3071_Tri_yellow,dead,0,0,good,,0.64,9.76,
+12/23/2025,2382_Tri_blue,alive,12.1,2,good,2.9,1.7,15.98,"seneseed, flowering"
+12/23/2025,2996A2_Tri_red,alive,10.1,3,good,0.16,0.95,7.32,
+12/23/2025,5626_Tri_green,alive,13.4,3+3,good,3,0.14,17.84,twins
+12/23/2025,4777-B_Tri_orange_blue,alive,4.5,3,good,0.28,0.19,1.48,
+12/23/2025,flag1_tri_Tri_orange,alive,12,3+3,good,2.41,1.32,12.56,twins
+12/23/2025,583_Tri_white,alive,13.5,3,good,1.23,1.33,10.74,senessed
+12/23/2025,6894_Tri_yellow,alive,13.7,3,good,1.23,0.66,5.18,
+12/23/2025,1669_Tri_blue,alive,19.9,3,good,3.72,2.95,12.08,
+12/23/2025,2573_Tri_pink,alive,16.5,3,good,4.33,2.31,9.22,
+12/23/2025,6885_Tri_red,alive,10.8,3,good,0.61,0.85,2.98,senessed
+12/23/2025,4543(5232)_Tri_purple,alive,5.8,3,good,0.64,0.17,3.38,
+12/23/2025,6881_Tri_green,alive,8.5,3+3,good,1.8,1.05,11.34,
+12/23/2025,989_Tri_orange,alive,9.3,3+3+3,good,3.07,1.6,25.02,"triplets; 2-3 rhizomes?, senessed"
+12/23/2025,5742_Tri_yellow,alive,11.8,3,good,2.25,1.56,8.23,
+12/23/2025,6558_Tri_blue,alive,11.6,3,good,2.46,2.48,11.37,
+12/23/2025,flag2_tri_Tri_pink,alive,8.2,3,,0.54,0.46,5.03,senessed
+12/23/2025,5228_Tri_red,,9.5,3,good,2.63,0.92,6.8,
+12/23/2025,1926_Tri_purple,alive,12.9,3,good,2.34,1.17,16.82,
+12/23/2025,4431_Tri_green,alive,4.5,3?,good,0.8,0.96,23.44,"not unwhorled, other"
+12/23/2025,2276_Tri_purple_blue,alive,11.3,3,good,1.18,0.58,5.9,
+12/23/2025,5040_Tri_orange,alive,14.8,3,good,2.33,0.85,7.28,flowering
+12/23/2025,5031_Tri_white,alive,4.2,3?,good,0.32,0.53,10.55,"not unwhorled, other"
+12/23/2025,684_Tri_yellow,alive,0.8,3?,good,0.04,1.59,8.5,"not unwhorled, other"
+12/23/2025,5403_Tri_white,dead,0,0,good,,,10.17,rotted?
+12/23/2025,6887_Tri_yellow,dead,0,0,good,0.1,1.05,3.72,leaf buried
+12/23/2025,978_Tri_blue,alive,13.5,3,good,1.96,2.01,8.13,
+12/23/2025,4373_Tri_pink,alive,17.1,3,good,1.46,0.31,5.25,garlic mustard growing in pot (rosette)
+12/23/2025,86_Tri_pink,alive,3.7,3,good,0.61,0.43,9.35,senessed
+12/23/2025,2329_Tri_red,alive,20.2,3,good,5.74,1.22,18.21,flowering
+12/23/2025,614_Tri_purple,alive,12.5,3+3,good,6.12,1.45,29.71,twins
+12/23/2025,4959_Tri_green,alive,13.6,3,good,3.2,2.03,4.84,flowering
+12/23/2025,4760_Tri_pink_blue,alive,12.1,3,good,1.09,0.31,4.2,
+12/23/2025,7120_Tri_blue_blue,alive,5,3+3,good,0.6,0.04,8.33,twins
+12/24/2025,3004_Tri_orange,alive,15.1,3,good,2.01,1.09,8.29,
+12/24/2025,1647_Tri_white,alive,8.5,3,good,1.8,1.49,8.89,senessed
+12/24/2025,3309_Tri_yellow,alive,2.4,3?,good,0.14,0.47,8.93,"not unwhorled, other"
+12/24/2025,2074_Tri_blue,dead,0,0,good,,,15.76,
+12/24/2025,3077_Tri_pink,alive,10.3,3,good,2.12,1.19,14.6,flowering
+12/24/2025,632_Tri_red,alive,12.2,3,good,1.61,0.59,10.38,senessed
+12/24/2025,1750_Tri_red,alive,10,3,good,2.47,1.42,8.42,
+12/24/2025,4414_Tri_purple,alive,6.2,3,good,1.75,1.52,8.97,
+12/24/2025,3526_Tri_green,alive,13.1,3,good,2.08,1.66,11.6,
+12/24/2025,5488_Tri_yellow_blue,dead,0,0,good,,1.95,16.54,
+12/24/2025,9145_Tri_orange,alive,17.4,3,good,2.89,2.79,22.42,
+12/24/2025,3305_Tri_white,dead,2.9,3,good,0.18,0.19,4.25,droopy
+12/24/2025,2927_Tri_orange,alive,11.6,3,good,1.9,1.47,8.68,
+12/24/2025,6879_Tri_white,alive,3.5,3,good,0.8,0.83,4.09,droopy
+12/24/2025,5904_Tri_orange,alive,5.4,2,good,0.33,1.03,4.83,droopy
+12/24/2025,2563_Tri_white,alive,13.4,3+3,good,4.01,0.5,37.24,twins
+12/24/2025,2988_Tri_yellow,alive,15.3,3,good,2.55,1.21,26.51,
+12/24/2025,4511_Tri_blue,alive,18.4,3+3,good,6.5,4.77,25.38,"twins, flowering"
+12/24/2025,4452_Tri_pink,alive,23.7,3,good,3.19,1.35,13.33,
+12/24/2025,4265_Tri_red,alive,12.9,3,good,2.07,1.49,13.42,senessed
+12/24/2025,3563_Tri_purple,alive,3.6,3,good,0.71,0.69,3.41,
+12/24/2025,4745_Tri_green,alive,11.2,3,good,3.22,2.62,16.1,
+12/24/2025,3427_Tri_green,alive,4.5,3,good,0.21,0.42,1.76,senessed
+12/24/2025,5381_Tri_white_blue,alive,10.6,3,good,2.6,1.32,5.87,
+12/24/2025,552_Tri_orange,alive,2.1,3,good,0.6,1.04,4.81,"droopy, senessed"
+12/24/2025,4990_Tri_white,alive,15.9,3+3,good,6.75,2.86,21.99,"twins, flowering"
+12/24/2025,827_Tri_yellow,dead,0,0,good,0.01,1.18,10.49,leaf under ground
+12/24/2025,482_Tri_blue,alive,12.9,3,good,3.12,1.52,6.38,
+12/24/2025,955_Tri_pink,alive,13,3+3,good,6.59,3.24,22.04,twins
+12/24/2025,2996A3_Tri_red,alive,7.1,3,good,1.07,0.81,7.75,droopy
+12/24/2025,4105_Tri_purple,alive,6.1,3,good,1.28,0.98,12.74,senessed
+12/24/2025,2912_Tri_white_blue,alive,8,3,good,1.7,0.45,14.61,
