@@ -39,7 +39,7 @@ names(facet_lab) <- c("NW", "W")
 ###############
 # Anet
 ###############
-df_noSterile$anet[63] <- NA
+df_noSterile$anet[c(75)] <- NA
 
 anet_tri <- lmer(log(anet + 1) ~ PlantGMTrt * ExpSoilSource * ExpFungSource + 
                    (1 | machine), data = df_noSterile)
@@ -68,8 +68,9 @@ cld(emmeans(anet_tri, pairwise~ExpSoilSource*ExpFungSource), alpha = 0.1)
 
 # Plot prep (full)
 anet_tri_results <- cld(emmeans(anet_tri, 
-                                ~PlantGMTrt*ExpSoilSource*ExpFungSource, type = "response"), 
-                        Letters = LETTERS, reversed = TRUE) %>%
+                                ~PlantGMTrt*ExpSoilSource*ExpFungSource, 
+                                type = "response"), 
+                        Letters = LETTERS, reversed = TRUE, alpha = 0.1) %>%
   mutate(.group = trimws(.group, "both"),
          full_trt = str_c("Plant", PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
          plot_trt = str_c("Plant", PlantGMTrt, "_Soil", ExpSoilSource),
@@ -79,46 +80,44 @@ anet_tri_results <- cld(emmeans(anet_tri,
                   labels = c("Plant history: ambient", "Plant history: weeded"))) %>% 
   data.frame()
 
+# Plot prep (ExpSoilSource * ExpFungSource interaction)
+anet_soilFung_int <- cld(emmeans(anet_tri, ~ExpSoilSource*ExpFungSource, 
+                                 type = "response"), 
+                                 Letters = LETTERS, reversed = TRUE,
+                                 alpha = 0.1) %>% 
+  mutate(.group = trimws(.group, "both")) %>% data.frame()
+
+
 ## Full plot
 png("../../drafts/figs/TT25_tri_anet_full.png", height = 5, width = 8, 
     units = "in", res = 600)
 ggplot(data = anet_tri_results) +
   geom_rect(aes(fill = ExpSoilSource),
-            xmin = -Inf,
-            xmax = 1.5,
-            ymin = -Inf,
-            ymax = Inf,
-            alpha = 0.05, 
-            fill = "#F1B700") +
+            xmin = -Inf, xmax = 1.5,
+            ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
   geom_rect(aes(fill = ExpSoilSource),
-            xmin = 1.5,
-            xmax = 3,
-            ymin = -Inf,
-            ymax = Inf,
-            alpha = 0.05, 
-            fill = "#00B2BE") +
-  geom_errorbar(aes(x = ExpSoilSource,
-                    y = response,
+            xmin = 1.5, xmax = 3,
+            ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource, y = response,
                     group = full_trt,
                     ymin = lower.CL,
                     ymax = upper.CL),
                 linewidth = 1, width = 0.5, 
                 position = position_dodge(width = 0.75)) +
-  geom_point(aes(x = ExpSoilSource,
-                 y = response,
+  geom_point(aes(x = ExpSoilSource, y = response,
                  fill = ExpFungSource,
                  group = full_trt),
              size = 6, shape = 21, 
              position = position_dodge(width = 0.75)) +
-  geom_text(aes(x = ExpFungSource, 
-                y = 2.5, 
-                group = full_trt, 
-                label = .group), 
-            size = 6, 
-            position = position_dodge(width = 0.75),
-            fontface = "bold") +
-  scale_y_continuous(limits = c(-0.5, 2.5), breaks = seq(-0.5, 2.5, 1)) +
-  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  geom_text(aes(x = ExpFungSource, y = 3, 
+                group = full_trt, label = .group), 
+            size = 6, fontface = "bold",
+            position = position_dodge(width = 0.75)) +
+  scale_y_continuous(limits = c(-1, 3), breaks = seq(-1, 3, 1)) +
+  scale_fill_manual(values = gm.colors, 
+                    labels = c("ambient", "weeded")) +
   scale_x_discrete(labels = c("ambient", "weeded")) +
   facet_grid(~facet_label) +
   labs(x = "Experimental Soil Source", 
@@ -131,6 +130,50 @@ ggplot(data = anet_tri_results) +
         legend.title = element_text(face = "bold"),
         legend.position = "bottom")
 dev.off()
+
+## Soil source x AM fungal source interaction plot
+png("../../drafts/figs/TT25_tri_anet_soilAM_int_plot.png", 
+    height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = anet_soilFung_int,
+       x = ExpSoilSource, 
+       y = anet) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf, xmax = 1.5,
+            ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5, xmax = 3,
+            ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource, y = response,
+                    group = ExpFungSource,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource, y = response,
+                 fill = ExpFungSource),
+             size = 6, shape = 21, 
+             position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpSoilSource, y = 3, 
+                group = ExpFungSource, label = .group), 
+            size = 6, fontface = "bold",
+            position = position_dodge(width = 0.75)) +
+  scale_y_continuous(limits = c(-1, 3), breaks = seq(-1, 3, 1)) +
+  scale_fill_manual(values = gm.colors, 
+                    labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("A"["net"]* " ("*mu*"mol m"^"-2"*" s"^"-1"*")")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+
 
 ###############
 # gsw
