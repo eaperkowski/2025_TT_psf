@@ -10,25 +10,36 @@ library(emmeans)
 library(multcomp)
 library(MuMIn)
 
-# Read in compiled dataset
-df <- read.csv("../../data/2025_2026/TT25_tri_photo_traits.csv") %>%
-  mutate(jmax_vcmax = Vcmax / Jmax)
-head(df)
+# Read photosynthetic dataset
+## df_photo <- read.csv("../../data/2025_2026/TT25_tri_photo_traits.csv") %>%
+##   mutate(jmax_vcmax = Vcmax / Jmax)
+## head(df)
+
+# Read harvest dataset
+## df_harvest <- read.csv("../../data/2025_2026/TT25_tri_harvest.csv")
+
+# Merge photosynthetic and harvest dataset
+## df <- df_photo %>%
+##   full_join(df_harvest, by = "id") %>%
+##   write.csv("../../data/2025_2026/TT25_tri_compiled.csv", row.names = F)
+
+# Read compiled dataset
+df <- read.csv("../../data/2025_2026/TT25_tri_compiled.csv")
 
 # Remove sterile plant treatment from analyses
 df_noSterile <- df %>%
-  filter(ExpFungSource != "Wsterile" & ExpFungSource != "NWsterile")
+  filter(ExpFungSource != "Wsterile" & ExpFungSource != "NWsterile") %>%
+  mutate(FullExpTrt = gsub("-", "_", FullExpTrt))
 
-
-df_noSterile %>%
-  filter(!is.na(anet)) %>%
-  group_by(PlantGMTrt, ExpSoilSource, ExpFungSource) %>%
-  summarize(length(anet))
+# Some plot aesthetics
+gm.colors <- c("#F1B700", "#00B2BE")
+facet_lab <- c("Plant history: ambient", "Plant history: weeded")
+names(facet_lab) <- c("NW", "W")
 
 ###############
 # Anet
 ###############
-df_noSterile$anet[75] <- NA
+df_noSterile$anet[63] <- NA
 
 anet_tri <- lmer(log(anet + 1) ~ PlantGMTrt * ExpSoilSource * ExpFungSource + 
                    (1 | machine), data = df_noSterile)
@@ -55,6 +66,72 @@ cld(emmeans(anet_tri, pairwise~PlantGMTrt*ExpFungSource, type = "response"), alp
 
 cld(emmeans(anet_tri, pairwise~ExpSoilSource*ExpFungSource), alpha = 0.1)
 
+# Plot prep (full)
+anet_tri_results <- cld(emmeans(anet_tri, 
+                                ~PlantGMTrt*ExpSoilSource*ExpFungSource, type = "response"), 
+                        Letters = LETTERS, reversed = TRUE) %>%
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant", PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant", PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded"))) %>% 
+  data.frame()
+
+## Full plot
+png("../../drafts/figs/TT25_tri_anet_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = anet_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf,
+            xmax = 1.5,
+            ymin = -Inf,
+            ymax = Inf,
+            alpha = 0.05, 
+            fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5,
+            xmax = 3,
+            ymin = -Inf,
+            ymax = Inf,
+            alpha = 0.05, 
+            fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = response,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = response,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, 
+             position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, 
+                y = 2.5, 
+                group = full_trt, 
+                label = .group), 
+            size = 6, 
+            position = position_dodge(width = 0.75),
+            fontface = "bold") +
+  scale_y_continuous(limits = c(-0.5, 2.5), breaks = seq(-0.5, 2.5, 1)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("A"["net"]* " ("*mu*"mol m"^"-2"*" s"^"-1"*")")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
+
 ###############
 # gsw
 ###############
@@ -63,7 +140,7 @@ gsw_tri <- lmer(log(gsw) ~ PlantGMTrt * ExpSoilSource * ExpFungSource +
 
 # Check normality assumptions
 plot(gsw_tri)
- qqnorm(residuals(gsw_tri))
+qqnorm(residuals(gsw_tri))
 qqline(residuals(gsw_tri))
 hist(residuals(gsw_tri))
 shapiro.test(residuals(gsw_tri))
@@ -80,12 +157,68 @@ cld(emmeans(gsw_tri, pairwise~ExpSoilSource*ExpFungSource, type = "response"), a
 ## plants growing in weeded soil; however, this response is only observed
 ## when plants are inoculated with nonweeded AMF community
 
+# Plot prep (full)
+gsw_tri_results <- cld(emmeans(gsw_tri, 
+                               ~PlantGMTrt*ExpSoilSource*ExpFungSource, 
+                               type = "response"), 
+                       Letters = LETTERS, reversed = TRUE) %>%
+  data.frame() %>% 
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant", PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant", PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded")))
+
+## Full plot
+png("../../drafts/figs/TT25_tri_gsw_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = gsw_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf, xmax = 1.5, ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5, xmax = 3, ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = response,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, 
+                width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = response,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, 
+             position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, 
+                y = 0.03, 
+                group = full_trt, 
+                label = .group), 
+            size = 6, position = position_dodge(width = 0.75), 
+            fontface = "bold") +
+  scale_y_continuous(limits = c(0, 0.03), breaks = seq(0, 0.03, 0.01)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("g"["sw"]* " (mol m"^"-2"*" s"^"-1"*")")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
 
 ###############
 # Vcmax25
 ###############
-df_noSterile$Vcmax[11] <- NA
-
 vcmax_tri <- lmer(log(Vcmax) ~ PlantGMTrt * ExpSoilSource * ExpFungSource + 
                     (1 | machine), data = df_noSterile)
 
@@ -104,7 +237,7 @@ r.squaredGLMM(vcmax_tri)
 
 # Pairwise comparisons
 emmeans(vcmax_tri, pairwise~ExpFungSource)
-## Weeded fungal source has marginally greater Vcmax
+## Weeded fungal source has greater Vcmax
 
 cld(emmeans(vcmax_tri, pairwise~ExpSoilSource*ExpFungSource))
 ## Exp fungal source response only observed in weeded soils
@@ -112,6 +245,62 @@ cld(emmeans(vcmax_tri, pairwise~ExpSoilSource*ExpFungSource))
 cld(emmeans(vcmax_tri, pairwise~PlantGMTrt*ExpSoilSource))
 ## Plants with weeded treatment history have greater Vcmax
 ## in non-weeded treatment soils
+
+# Plot prep (full)
+vcmax_tri_results <- cld(emmeans(vcmax_tri, 
+                                 ~PlantGMTrt*ExpSoilSource*ExpFungSource, 
+                                 type = "response"), 
+                         Letters = LETTERS, reversed = TRUE) %>%
+  data.frame() %>% left_join(vcmax_tri_cld) %>%
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded")))
+
+
+## Full plot
+png("../../drafts/figs/TT25_tri_vcmax_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = vcmax_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf,xmax = 1.5,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5,xmax = 3,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = response,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = response,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, y = 30, group = full_trt, label = .group), 
+            size = 5, position = position_dodge(width = 0.75),
+            fontface = "bold") +
+  scale_y_continuous(limits = c(0, 30), breaks = seq(0, 30, 10)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("V"["cmax25"]* " ("*mu*"mol m"^"-2"*" s"^"-1"*")")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
 
 ###############
 # Jmax
@@ -147,6 +336,61 @@ cld(emmeans(jmax_tri, pairwise~PlantGMTrt*ExpSoilSource), alpha = 0.1)
 ## Non-weeded soil source marginally increases Jmax compared to weeded soil 
 ## source, but only in plants with weeded treatment history
 
+# Plot prep (full)
+jmax_tri_results <- cld(emmeans(jmax_tri, 
+                                ~PlantGMTrt*ExpSoilSource*ExpFungSource, 
+                                type = "response"), 
+                        Letters = LETTERS, reversed = TRUE) %>%
+  data.frame() %>%
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded")))
+
+# Full plot
+png("../../drafts/figs/TT25_tri_jmax_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = jmax_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf, xmax = 1.5, ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5, xmax = 3, ymin = -Inf, ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = response,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = response,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, 
+             position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, y = 60, group = full_trt, label = .group), 
+            size = 5, position = position_dodge(width = 0.75),
+            fontface = "bold") +
+  scale_y_continuous(limits = c(0, 60), breaks = seq(0, 60, 20)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("J"["max25"]* " ("*mu*"mol m"^"-2"*" s"^"-1"*")")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
+
 ###############
 # Jmax:Vcmax
 ###############
@@ -171,6 +415,60 @@ cld(emmeans(jmaxvcmax_tri, pairwise~PlantGMTrt*ExpSoilSource, type = "response")
 ## Weeded plants have greater Jmax:Vcmax (approaching 1), but this 
 ## response is only observed in non-weeded soils
 
+# Plot prep (full)
+jmaxvcmax_tri_results <- cld(emmeans(jmaxvcmax_tri, 
+                                     ~PlantGMTrt*ExpSoilSource*ExpFungSource, type = "response"), 
+                             Letters = LETTERS, reversed = TRUE) %>%
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded"))) %>% 
+  data.frame()
+
+## Full plot
+png("../../drafts/figs/TT25_tri_jmaxvcmax_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = jmaxvcmax_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf,xmax = 1.5,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5,xmax = 3,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = response,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = response,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, y = 0.6, group = full_trt, label = .group), 
+            size = 5, position = position_dodge(width = 0.75),
+            fontface = "bold") +
+  scale_y_continuous(limits = c(0.3, 0.6), breaks = seq(0.3, 0.6, 0.1)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("J"["max25"]* ": V"["cmax25"]*" (unitless)")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
+
 ###############
 # Rd
 ###############
@@ -192,13 +490,72 @@ r.squaredGLMM(rd_tri)
 
 # Pairwise comparisons
 emmeans(rd_tri, pairwise~ExpFungSource, type = "response")
-## 
+## Plants with weeded fungal source have greater Rd25 than
+## plants with ambient fungal source
+
+cld(emmeans(rd_tri, pairwise~ExpFungSource*PlantGMTrt, type = "response"))
+## Weeded fungal source response is driven by plants that have historically
+## grown in the weeded treatment
+
+# Plot prep (full)
+rd_tri_results <- cld(emmeans(rd_tri, 
+                              ~PlantGMTrt*ExpSoilSource*ExpFungSource, type = "response"), 
+                      Letters = LETTERS) %>%
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded"))) %>% 
+  data.frame()
+
+## Full plot
+png("../../drafts/figs/TT25_tri_rd_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = rd_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf,xmax = 1.5,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5,xmax = 3,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = response,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = response,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, y = 3, group = full_trt, label = .group), 
+            size = 5, position = position_dodge(width = 0.75),
+            fontface = "bold") +
+  scale_y_continuous(limits = c(0, 3), breaks = seq(0, 3, 1)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("Rd"["25"]* " ("*mu*"mol m"^"-2"*" s"^"-1"*")")),       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
 
 ###############
 # iWUE
 ###############
 iwue_tri <- lmer(iwue ~ PlantGMTrt * ExpSoilSource * ExpFungSource + 
-                        (1 | machine), data = filter(df_noSterile, iwue > 0 & iwue < 200))
+                   (1 | machine), data = filter(df_noSterile, iwue > 0 & iwue < 200))
 
 # Check normality assumptions
 plot(iwue_tri)
@@ -213,6 +570,61 @@ summary(iwue_tri)
 Anova(iwue_tri) # No effect of any treatment combination
 r.squaredGLMM(iwue_tri)
 
+# Plot prep (full)
+iwue_tri_results <- cld(emmeans(iwue_tri, 
+                              ~PlantGMTrt*ExpSoilSource*ExpFungSource, type = "response"), 
+                      Letters = LETTERS) %>%
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded"))) %>% 
+  data.frame()
+
+## Full plot
+png("../../drafts/figs/TT25_tri_iwue_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = iwue_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf,xmax = 1.5,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5,xmax = 3,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = emmean,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = emmean,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, 
+             position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, y = 150, group = full_trt, label = .group), 
+            size = 5, position = position_dodge(width = 0.75),
+            fontface = "bold") +
+  scale_y_continuous(limits = c(0, 150), breaks = seq(0, 150, 50)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("iWUE ("*mu*"mol mol"^"-1"*")")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
 
 ###############
 # TLA
@@ -233,6 +645,134 @@ summary(tla_tri)
 Anova(tla_tri) # No treatment effect
 r.squaredGLMM(tla_tri)
 
+# Plot prep (full)
+tla_tri_results <- cld(emmeans(tla_tri, 
+                                ~PlantGMTrt*ExpSoilSource*ExpFungSource, type = "response"), 
+                        Letters = LETTERS) %>%
+  mutate(.group = trimws(.group, "both"),
+         full_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource, "_Fung", ExpFungSource),
+         plot_trt = str_c("Plant",PlantGMTrt, "_Soil", ExpSoilSource),
+         facet_label = 
+           factor(PlantGMTrt,
+                  levels = c("NW", "W"),
+                  labels = c("Plant history: ambient", "Plant history: weeded"))) %>% 
+  data.frame()
 
+## Full plot
+png("../../drafts/figs/TT25_tri_tla_full.png", height = 5, width = 8, 
+    units = "in", res = 600)
+ggplot(data = tla_tri_results) +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = -Inf,xmax = 1.5,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#F1B700") +
+  geom_rect(aes(fill = ExpSoilSource),
+            xmin = 1.5,xmax = 3,
+            ymin = -Inf,ymax = Inf,
+            alpha = 0.05, fill = "#00B2BE") +
+  geom_errorbar(aes(x = ExpSoilSource,
+                    y = emmean,
+                    group = full_trt,
+                    ymin = lower.CL,
+                    ymax = upper.CL),
+                linewidth = 1, width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  geom_point(aes(x = ExpSoilSource,
+                 y = emmean,
+                 fill = ExpFungSource,
+                 group = full_trt),
+             size = 6, shape = 21, 
+             position = position_dodge(width = 0.75)) +
+  geom_text(aes(x = ExpFungSource, y = 80, group = full_trt, label = .group), 
+            size = 5, position = position_dodge(width = 0.75),
+            fontface = "bold") +
+  scale_y_continuous(limits = c(20, 80), breaks = seq(20, 80, 20)) +
+  scale_fill_manual(values = gm.colors, labels = c("ambient", "weeded")) +
+  scale_x_discrete(labels = c("ambient", "weeded")) +
+  facet_grid(~facet_label) +
+  labs(x = "Experimental Soil Source", 
+       y = expression(bold("Total leaf area (cm"^"2"*")")),
+       fill = "AM fungal source") +
+  theme_classic(base_size = 18) +
+  theme(axis.title = element_text(face = "bold"),
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.off()
 
+###############
+# total biomass
+###############
+df_noSterile$anet[63] <- NA
 
+tbio_tri <- lm(log(total_biomass) ~ PlantGMTrt * ExpSoilSource * ExpFungSource, 
+               data = df_noSterile)
+
+# Check normality assumptions
+plot(tbio_tri)
+qqnorm(residuals(tbio_tri))
+qqline(residuals(tbio_tri))
+hist(residuals(tbio_tri))
+shapiro.test(residuals(tbio_tri))
+outlierTest(tbio_tri)
+
+# Model output
+summary(tbio_tri)
+Anova(tbio_tri)
+
+###############
+# Root:shoot
+###############
+df_noSterile$root_shoot[c(25, 107, 109, 111, 113, 114, 115)] <- NA
+
+rootshoot_tri <- lm(log(root_shoot) ~ PlantGMTrt * ExpSoilSource * ExpFungSource, 
+               data = df_noSterile)
+
+# Check normality assumptions
+plot(rootshoot_tri)
+qqnorm(residuals(rootshoot_tri))
+qqline(residuals(rootshoot_tri))
+hist(residuals(rootshoot_tri))
+shapiro.test(residuals(rootshoot_tri))
+outlierTest(rootshoot_tri)
+
+# Model output
+summary(rootshoot_tri)
+Anova(rootshoot_tri)
+
+###############
+# Root:shoot
+###############
+rhizome_tri <- lm(log(rhizome_mass_g) ~ PlantGMTrt * ExpSoilSource * ExpFungSource, 
+                    data = df_noSterile)
+
+# Check normality assumptions
+plot(rhizome_tri)
+qqnorm(residuals(rhizome_tri))
+qqline(residuals(rhizome_tri))
+hist(residuals(rhizome_tri))
+shapiro.test(residuals(rhizome_tri))
+outlierTest(rhizome_tri)
+
+# Model output
+summary(rhizome_tri)
+Anova(rhizome_tri)
+
+###############
+# Root:shoot
+###############
+rhizome_tri <- lm(log(rhizome_mass_g) ~ PlantGMTrt * ExpSoilSource * ExpFungSource, 
+                  data = df_noSterile)
+
+# Check normality assumptions
+plot(rhizome_tri)
+qqnorm(residuals(rhizome_tri))
+qqline(residuals(rhizome_tri))
+hist(residuals(rhizome_tri))
+shapiro.test(residuals(rhizome_tri))
+outlierTest(rhizome_tri)
+
+# Model output
+summary(rhizome_tri)
+Anova(rhizome_tri)
